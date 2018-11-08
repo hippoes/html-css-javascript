@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-touch-fullscreen" content="yes" />
+<meta name="format-detection" content="telephone=no"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="msapplication-tap-highlight" content="no" />
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1" />
+<title>Wap端的弹出提示框</title>
+<style type="text/css">
+    /*多分辨率设定rem设定*/
+    html {font-size : 16px; }
+    /*Note3*/
+    @media only screen and (min-width: 360px) {
+        html { font-size: 18px !important; }
+    }
+     
+    /*big Resolution*/
+    @media only screen and (min-width: 641px) {
+        html { font-size: 20px !important; }
+    }
+    body,html,h3{ font-family: "Microsoft YaHei"; background-color: #f5f5f5; }
+    a {text-decoration: none;}
+    /*操作提示弹出层*/
+    .s-dialog-mask { position: fixed; z-index: 999; top: 0; right: 0; bottom: 0; left: 0; filter:progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr='#BF000000', endColorstr='#BF000000');background:rgba(0,0,0,0.75);}
+    .s-dialog-wrapper { position: fixed; z-index: 9999; max-width: 12rem; min-width: 10rem; margin-top: -2rem; border-radius: 0.2rem;}
+    .s-dialog-skin-green { background-color: rgba(255,255,255,0.90); border: solid 0.05rem #000;}
+    .s-dialog-skin-block { background-color: rgba(255,255,255,0.90); border: solid 0.05rem #000;}
+    .s-dialog-skin-red { background-color: rgba(255,255,255,0.90); border: solid 0.05rem #000;}
+    .s-dialog-content { padding: 0.8rem 0.6rem; text-align: center; font-size: 0.75rem; line-height: 0.9rem;}
+    .s-dialog-skin-green .s-dialog-content { color: #000;}
+    .s-dialog-skin-red .s-dialog-content { color: #000;}
+    .s-dialog-skin-block .s-dialog-content { color: #000;}
+    .s-dialog-content h6 { display: block; font-size: 0.55rem; line-height: 0.9rem; color: #333;}
+    .s-dialog-btn-wapper { display: block; padding: 0.6rem 0; border-top: solid 0.05rem rgba(0,0,0,0.15); font-size: 0; }
+    .s-dialog-btn-wapper a { display: inline-block; width: 49%; font-size: 0.7rem; font-weight: 600; line-height: 0.9rem; color: #0080FF; text-align: center;}
+    .s-dialog-btn-wapper a:last-child { border-left: solid 0.05rem rgba(0,0,0,0.15);}
+    .s-dialog-skin-block .s-dialog-btn-wapper a { color: #0080FF;}
+    h3{font-family:Microsoft Yahei;color:#ff5800;text-align:center;}
+    a{font-family:Microsoft Yahei;text-align:center;display:block;}
+</style>
+</head>
+<body>
+ 
+<h3>这是一个弹出层提示演示框</h3>
+<h3>这是一个弹出层提示演示框</h3>
+<h3>这是一个弹出层提示演示框</h3>
+<hr/>
+<a href="javascript:void(0)" id="altMsg">点击弹出提示层</a>
+ 
+<script type="text/javascript" src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js" ></script>
+<script type="text/javascript" src=" http://www.dodobook.net/demo/mouse_star/dodobook.js" ></script>
+<script type="text/javascript">
+$(function() {
+    $('#altMsg').click(function(){
+        $.sDialog({
+            skin: "red",
+            content: 'Hello DodoBook!!!',
+            okBtn: true,
+            cancelBtn: true,
+            okFn : function(){
+                alert("aaa");
+            },
+            cancelFn : function(){
+                alert("ffff");
+            }
+        });
+        return false
+    });
+});
+ 
+ 
+(function($) {
+    $.extend($, {
+        sDialog: function(options) {
+            //dialog弹出框
+            var opts = $.extend({}, $.sDialog.defaults, options);
+            function _init() {
+                var mask_height = ($("body").height() > $(window).height()) ? $("body").height() : $(window).height();
+                var windowH = parseInt($(window).height());
+                var warpTop = windowH / 2;
+                var dTmpl = '<div class="simple-dialog-wrapper">';
+                if (opts.lock) { //是否有锁定
+                    dTmpl += '<div class="s-dialog-mask" style="height:' + mask_height + 'px;"></div>';
+                }
+                dTmpl += '<div style="left:50%;top:' + warpTop + 'px" class="s-dialog-wrapper s-dialog-skin-' + opts.skin + '">' + '<div class="s-dialog-content">' + opts.content + '</div>'
+                if (opts.okBtn || opts.cancelBtn) {
+                    dTmpl += '<div class="s-dialog-btn-wapper">';
+                    if (opts.okBtn) {
+                        dTmpl += '<a href="javascript:void(0)" class="s-dialog-btn-ok">' + opts.okBtnText + '</a>';
+                    }
+                    if (opts.cancelBtn) {
+                        dTmpl += '<a href="javascript:void(0)" class="s-dialog-btn-cancel">' + opts.cancelBtnText + '</a>';
+                    }
+                    dTmpl += '</div>';
+                }
+                dTmpl += '</div>';
+                dTmpl += '</div>';
+                $("body").append(dTmpl);
+                var d_wrapper = $(".s-dialog-wrapper");
+                var mLeft = -parseInt(d_wrapper.width()) / 2;
+                d_wrapper.css({
+                    "margin-left": mLeft,
+                });
+                //绑定事件
+                _bind();
+            }
+ 
+            function _bind() {
+                var okBtn = $(".s-dialog-btn-ok");
+                var cancelBtn = $(".s-dialog-btn-cancel");
+                okBtn.click(_okFn);
+                cancelBtn.click(_cancelFn);
+                if (!opts.okBtn && !opts.cancelBtn) {
+                    setTimeout(function() {
+                        _close();
+                    }, opts.autoTime);
+                }
+            }
+            function _okFn() { opts.okFn(); _close(); }
+            function _cancelFn() { opts.cancelFn(); _close(); }
+            function _close() { $(".simple-dialog-wrapper").remove(); }
+            return this.each(function() { _init(); })();
+        },
+    });
+    //sDialog
+    $.sDialog.defaults = {
+        autoTime: '2000', //当没有 确定和取消按钮的时候，弹出框自动关闭的时间
+        "skin": 'block', //皮肤，默认黑色
+        "content": "我是一个弹出框", //弹出框里面的内容
+        "width": 100, //没用到
+        "height": 100, //没用到
+        "okBtn": true, //是否显示确定按钮
+        "cancelBtn": true, //是否显示确定按钮
+        "okBtnText": "确定", //确定按钮的文字
+        "cancelBtnText": "取消", //取消按钮的文字
+        "lock": true, //是否显示遮罩
+        "okFn": function() {}, //点击确定按钮执行的函数
+        "cancelFn": function() {} //点击取消按钮执行的函数
+    };
+})(jQuery);
+ 
+ 
+</script>
+ 
+</body>
+</html>

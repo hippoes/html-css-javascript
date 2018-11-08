@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>css渐变效果</title>
+	<style>
+	#div1{
+		width:400px;height:200px;border:1px solid #000;margin-bottom:10px;
+	}
+	/*制作从底部到顶部直线渐变最简单的方法直接使用“to top”关键词。表示第一颜色向第二颜色渐变,下同。实现类似于“to top”效果还可以使用角度值“0deg”、“360deg”和“-360deg”。*/
+	.gradient{
+		background:linear-gradient(to top ,#39f,#fff);
+	}
+	/* “to left”关键词实现了从右向左颜色渐变，“to left”实现的效果也可以使用角值“-90deg”和“270deg”；*/
+	.gradient1{
+		background:linear-gradient(to left ,#39f,#fff);
+	}
+	/* “to top right”关键词实现左下角到右上角的线性渐变。也就是第一颜色从左下角向右上角第二颜色渐变。” */
+	.gradient2{
+		background:linear-gradient(to top right ,#39f,#fff);
+	}
+	/* 
+		这个例子指定三个色标:
+		需要注意的是第一个和最后一个色标并没有指定一个位置; 由于这个原因， 位置值0％和100%将分别自动的分配给第一个和最后一个色标 。中间的色标指定一个80%的位置, 把剩下的部分留给底部。
+	*/
+	.gradient3{
+		background:linear-gradient(to bottom,blue,white 80%,green);
+	}
+	/*
+		其实在实际中，渐变不仅仅是只有两种颜色，会有多色。接下来，我们一起来看一个从右向左的五彩渐变。
+		由代码可知，我们只要设置好了渐变位置，剩下的就可以随意设置颜色了。
+	 */
+	.gradient4{
+		background:-webkit-linear-gradient(left,red,orange,yellow,green,blue,indigo,violet);
+	}
+	</style>	
+</head>
+<body>
+	<div id="div1" class="gradient"></div>
+	<div id="div1" class="gradient1"></div>
+	<div id="div1" class="gradient2"></div>
+	<div id="div1" class="gradient3"></div>
+	<div id="div1" class="gradient4"></div>
+</body>
+</html>
